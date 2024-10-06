@@ -1,0 +1,26 @@
+service: aws-nodejs-severless-functions
+
+frameworkVersion: "3"
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  region: eu-west-3
+
+functions:
+  createLog:
+    handler: functions/create-log.createLog
+    events:
+      - httpApi:
+          path: /createLog
+          method: post
+  
+  getLogs:
+    handler: functions/get-logs.getLogs
+    events:
+      - httpApi:
+          path: /getLogs
+          method: get
+
+plugins:
+  - serverless-offline
