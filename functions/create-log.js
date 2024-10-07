@@ -5,7 +5,40 @@ let logs = [];
 
 module.exports.createLog = async (event) => {
   try {
-    const body = JSON.parse(event.body);
+  let body;
+    
+    if (typeof event.body === 'string') {
+      try {
+        body = JSON.parse(event.body);
+      } catch (parseError) {
+        console.error('Error parsing JSON:', parseError);
+        return {
+          statusCode: 400,
+          body: JSON.stringify({ error: 'Invalid JSON in request body' }),
+        };
+      }
+    } else if (typeof event.body === 'object') {
+      body = event.body;
+    } else {
+      return {
+        statusCode: 400,
+        body: JSON.stringify({ error: 'Invalid request, body is missing or in an incorrect format' }),
+      };
+    }
+
+    if (!body) {
+      return {
+        statusCode: 400,
+        body: JSON.stringify({ error: 'Invalid request, body is missing' }),
+      };
+    }
+
+    if (!validateInput(body)){
+      return {
+        statusCode: 400,
+        body: JSON.stringify({ error: 'Invalid request, incorrect input' }),
+      };
+    }
 
     const Severity = body.Severity;
     const Message = body.Message;
@@ -49,5 +82,14 @@ function validateSeverity(Severity) {
   }
   else{
     return false;
+  }
+}
+
+function validateInput(body){
+  if ('Severity' in body && 'Message' in body){
+    return true
+  }
+  else{
+    return false
   }
 }
