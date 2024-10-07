@@ -20,7 +20,7 @@ jobs:
 
     - name: Install dependencies
       run: npm install
-      
+
     - name: Install serverless-offline
       run: npm install serverless-offline --save-dev
       
@@ -33,9 +33,6 @@ jobs:
 
     - name: Install serverless
       run: npm i serverless@3.39.0 -g  
-
-    - name: Configure serverless framework
-      run: npx serverless config credentials --provider aws --key ${{ secrets.AWS_ACCESS_KEY_ID }} --secret ${{ secrets.AWS_SECRET_ACCESS_KEY }} 
 
     - name: Deploy using Serverless Framework
       run: npx serverless deploy
