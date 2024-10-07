@@ -1,14 +1,24 @@
 'use strict';
 
+const AWS = require('aws-sdk');
+const cloudwatchlogs = new AWS.CloudWatchLogs({ region: 'us-east-1' });
+
+
 module.exports.getLogs = async (event) => {
 try {
-    const recentLogs = logs
-        .sort((a, b) => new Date(b.DateTime) - new Date(a.DateTime))
-        .slice(0, 100);
+
+    const logGroupName = '/aws/lambda/YOUR_LAMBDA_FUNCTION_NAME';
+
+    const params = {
+        logGroupName: logGroupName,
+        limit: 100,  
+    };
+
+    const data = await cloudwatchlogs.filterLogEvents(params).promise();
 
     return {
         statusCode: 200,
-        body: JSON.stringify(recentLogs)
+        body: JSON.stringify(data.event)
     };
 } catch (error) {
     return {
