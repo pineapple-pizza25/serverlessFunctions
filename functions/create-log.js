@@ -1,7 +1,16 @@
 'use strict';
 const { v4: uuidv4 } = require('uuid');
+const winston = require('winston');
 
-let logs = [];
+const logger = winston.createLogger({
+  level: 'info',
+  format: winston.format.json(),
+  defaultMeta: { service: 'user-service' },
+  transports: [
+    new winston.transports.File({ filename: 'error.log', level: 'error' }),
+    new winston.transports.File({ filename: 'combined.log' }),
+  ],
+});
 
 module.exports.createLog = async (event) => {
   try {
@@ -57,7 +66,7 @@ module.exports.createLog = async (event) => {
       Message: Message
     };
 
-    logs.push(logEntry);
+    logger.log(logEntry)
 
     return {
         statusCode: 200,
