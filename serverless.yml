@@ -6,6 +6,19 @@ provider:
   name: aws
   runtime: nodejs18.x
   region: us-east-1
+  iam:
+    role:
+      statements:
+        - Effect: "Allow"
+          Action:
+            - "logs:FilterLogEvents"
+          Resource:
+            - "arn:aws:logs:us-east-1:783764579314:log-group:/aws/lambda/*:*"
+
+  environment:
+    CLOUDWATCH_GROUP_NAME: /aws/lambda/aws-nodejs-severless-functions-dev-createLog
+    CLOUDWATCH_STREAM_NAME: logsCreated
+    CLOUDWATCH_REGION: us-east-1
 
 functions:
   createLog:

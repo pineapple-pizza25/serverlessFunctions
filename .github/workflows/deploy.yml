@@ -39,3 +39,6 @@ jobs:
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        CLOUDWATCH_GROUP_NAME: /aws/lambda/aws-nodejs-severless-functions-dev-createLog
+        CLOUDWATCH_STREAM_NAME: logs
+        CLOUDWATCH_REGION: us-east-1

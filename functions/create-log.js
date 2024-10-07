@@ -1,14 +1,27 @@
 'use strict';
 const { v4: uuidv4 } = require('uuid');
 const winston = require('winston');
+const WinstonCloudWatch = require('winston-cloudwatch');
+
+const cloudwatchConfig = {
+  logGroupName: process.env.CLOUDWATCH_GROUP_NAME, 
+  logStreamName: 'logsCreated', 
+  awsRegion: process.env.CLOUDWATCH_REGION, 
+  messageFormatter: ({ level, message, additionalInfo }) => {
+    return `[${level}] : ${JSON.stringify(message)} \nAdditional Info: ${JSON.stringify(additionalInfo)}`;
+  },
+};
 
 const logger = winston.createLogger({
-  level: 'info',
   format: winston.format.json(),
   defaultMeta: { service: 'user-service' },
   transports: [
-    new winston.transports.File({ filename: 'error.log', level: 'error' }),
-    new winston.transports.File({ filename: 'combined.log' }),
+    new winston.transports.Console({
+      timestamp: true,
+      colorize: true,
+      level: 'info',
+      }),
+    new WinstonCloudWatch(cloudwatchConfig),
   ],
 });
 
@@ -66,7 +79,13 @@ module.exports.createLog = async (event) => {
       Message: Message
     };
 
-    logger.log(logEntry)
+    if (Severity == 'info') {
+      logger.info('Info log', logEntry);
+    } else if (Severity == 'warning') {
+      logger.warn('Warning log', logEntry);
+    } else if (Severity == 'error') {
+      logger.error('Error log', logEntry);
+    }
 
     return {
         statusCode: 200,
