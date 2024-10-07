@@ -28,6 +28,8 @@ jobs:
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: us-east-1  
 
-    # Deploy to AWS using Serverless Framework
+    - name: Configure serverless framework
+      run: npx serverless config credentials --provider aws --key <AWS-Access-Key-ID> --secret <AWS-Secret-key> 
+
     - name: Deploy using Serverless Framework
       run: npx serverless deploy
