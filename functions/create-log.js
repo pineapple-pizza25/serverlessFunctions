@@ -3,18 +3,12 @@ const { v4: uuidv4 } = require('uuid');
 const winston = require('winston');
 const WinstonCloudWatch = require('winston-cloudwatch');
 
-const cloudwatchConfig = {
-  logGrogroupNameupName: process.env.CLOUDWATCH_GROUP_NAME, 
-  logStreamName: 'logsCreated', 
-  awsRegion: process.env.CLOUDWATCH_REGION, 
-  messageFormatter: ({ level, message, additionalInfo }) => {
-    return `[${level}] : ${JSON.stringify(message)} \nAdditional Info: ${JSON.stringify(additionalInfo)}`;
-  },
-};
-
+/*
+declaration of winston logger
+*/
 const logger = winston.createLogger({
   format: winston.format.json(),
-  defaultMeta: { service: 'user-service' },
+  defaultMeta: { function: 'create-log' },
   transports: [
     new winston.transports.Console({
       timestamp: true,
@@ -24,16 +18,20 @@ const logger = winston.createLogger({
     new WinstonCloudWatch({
       logGroupName: '/aws/lambda/aws-nodejs-severless-functions-dev-createLog',
       logStreamName: 'logsCreated',
-      awsRegion: 'eu-west-3'
+      awsRegion: 'us-east-1'
       }),,
   ],
 });
 
+
+/*
+function to store log in cloudwatch
+*/
 module.exports.createLog = async (event) => {
   try {
   let body;
     
-    if (typeof event.body === 'string') {
+    if (typeof event.body === "string") {
       try {
         body = JSON.parse(event.body);
       } catch (parseError) {
@@ -43,7 +41,7 @@ module.exports.createLog = async (event) => {
           body: JSON.stringify({ error: 'Invalid JSON in request body' }),
         };
       }
-    } else if (typeof event.body === 'object') {
+    } else if (typeof event.body === "object") {
       body = event.body;
     } else {
       return {
@@ -76,6 +74,12 @@ module.exports.createLog = async (event) => {
       };      
     }
     
+
+    /*
+    the log entry will consist of a randomly generated ID, 
+    the system dateTime as well as the severity and message 
+    from the json body
+    */
     const logEntry = {
       ID: uuidv4(), 
       DateTime: new Date().toISOString(),  
@@ -108,6 +112,10 @@ module.exports.createLog = async (event) => {
   }
 };
 
+
+/*
+method used to validate if the correct Severity value has been received
+*/
 function validateSeverity(Severity) {
   if (Severity == "info" || Severity == "warning" || Severity == "error"){
     return true;
@@ -117,6 +125,10 @@ function validateSeverity(Severity) {
   }
 }
 
+
+/*
+method used to check if the json body received is valid
+*/
 function validateInput(body){
   if ('Severity' in body && 'Message' in body){
     return true

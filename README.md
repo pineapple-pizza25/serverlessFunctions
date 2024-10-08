@@ -1,9 +1,9 @@
-# AWS laambda severless functions using Nodejs
+# AWS Lambda severless functions using Nodejs
 
 ## Table of Contents
 - [About the Project](#about-the-project)
 - [Installation](#installation)
-- [Usage](#usage)
+- [Testing](#testing)
 
 ---
 
@@ -14,9 +14,10 @@ This project was built is built to showcase the use of AWS Lambda functions usin
 - [Nodejs](https://nodejs.org/docs/latest/api/)
 - [Serverless Framework](https://www.npmjs.com/package/serverless)
 - [AWS Lambda](https://docs.aws.amazon.com/lambda/)
+- [Winston](https://www.npmjs.com/package/winston)
 
 ## Features
-- Create a log with unique id and date/time stamp.
+- Create a log with unique id and a date/time stamp.
 - Get the last 100 logs
 
 ## Installation
@@ -44,7 +45,7 @@ serverless deploy
 
 ```
 
-## Usage
+## Testing
 
 ### Testing the create log endpoint
 
