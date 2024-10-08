@@ -4,7 +4,7 @@ const winston = require('winston');
 const WinstonCloudWatch = require('winston-cloudwatch');
 
 const cloudwatchConfig = {
-  logGroupName: process.env.CLOUDWATCH_GROUP_NAME, 
+  logGrogroupNameupName: process.env.CLOUDWATCH_GROUP_NAME, 
   logStreamName: 'logsCreated', 
   awsRegion: process.env.CLOUDWATCH_REGION, 
   messageFormatter: ({ level, message, additionalInfo }) => {
@@ -21,7 +21,11 @@ const logger = winston.createLogger({
       colorize: true,
       level: 'info',
       }),
-    new WinstonCloudWatch(cloudwatchConfig),
+    new WinstonCloudWatch({
+      logGroupName: '/aws/lambda/aws-nodejs-severless-functions-dev-createLog',
+      logStreamName: 'logsCreated',
+      awsRegion: 'eu-west-3'
+      }),,
   ],
 });
 

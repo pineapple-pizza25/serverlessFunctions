@@ -2,7 +2,7 @@ const winston = require("winston");
 const WinstonCloudWatch = require('winston-cloudwatch');
 
 export const logger = new winston.createLogger({
-    format: winston.format.json(),  
+    format: winston.format.json(),
     transports: [
         new winston.transports.Console({
             timestamp: true,
@@ -24,3 +24,38 @@ const cloudwatchConfig = {
         return `[${level}] : ${JSON.stringify(message)} \nAdditional Info: ${JSON.stringify(additionalInfo)}}`;
     }
 }
+
+export const loggerMiddleWare = (req, res, next) => {
+    const now = Date.now();
+    const { method, originalUrl } = req;
+    const userAgent = req.get('user-agent') || '';
+    const androidBuildNo = req.get('build-number') || '';
+    let body = null;
+    body = req.body;
+    
+    const oldJson = res.json;
+    res.json = (responseBody) => {
+        const size = Buffer.byteLength(JSON.stringify(responseBody)) / 1024;
+        let finalResponse = responseBody;
+        if (size > 256) {
+            finalResponse =
+                'This message is too large to be delivered to the cloudWatchLogs.';
+        }
+        const resp = {
+            url: `${method} ${originalUrl} ${req.clientIp
+                } ${userAgent} ${androidBuildNo} ${Date.now() - now} ms`,
+            request: {
+                body: body,
+                token: req.headers.authorization,
+            },
+            response: {
+                status: res.statusCode,
+                resBody: finalResponse,
+            },
+        };
+        logger.info(resp);
+        return oldJson.call(res, responseBody);
+    };
+    next();
+}
+logger.add(new WinstonCloudWatch(cloudwatchConfig))

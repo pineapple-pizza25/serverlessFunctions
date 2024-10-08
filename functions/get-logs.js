@@ -7,7 +7,7 @@ const cloudwatchlogs = new AWS.CloudWatchLogs({ region: 'us-east-1' });
 module.exports.getLogs = async (event) => {
 try {
 
-    const logGroupName = '/aws/lambda/YOUR_LAMBDA_FUNCTION_NAME';
+    const logGroupName = '/aws/lambda/aws-nodejs-severless-functions-dev-createLog';
 
     const params = {
         logGroupName: logGroupName,
@@ -18,7 +18,7 @@ try {
 
     return {
         statusCode: 200,
-        body: JSON.stringify(data.event)
+        body: JSON.stringify(data.events)
     };
 } catch (error) {
     return {

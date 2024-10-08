@@ -4,7 +4,6 @@
 - [About the Project](#about-the-project)
 - [Installation](#installation)
 - [Usage](#usage)
-- [References](#references)
 
 ---
 
@@ -84,14 +83,3 @@ Enter the following in Postman url and select the get method
 ```
 
 
-
-## References
-
-Background Image:
-The moses mabhida stadium is a stadium in Durban, South Africa, named after moses mabhida, a former general secretary of the South African..." (2024) Pinterest. Available at: https://za.pinterest.com/pin/846817536215452969/ (Accessed: 06 September 2024). 
-
-Scroll wheel:
-Chand, M. (2024) Scroll windows with WPF scrollviewer in C# and Xaml, C# Corner. Available at: https://www.c-sharpcorner.com/UploadFile/mahesh/using-xaml-scrollviewer-in-wpf/ (Accessed: 12 September 2024). 
-
-Font:
-(No date) Google fonts. Available at: https://fonts.google.com/selection?preview.text=Location (Accessed: 12 September 2024). 
