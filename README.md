@@ -14,7 +14,7 @@ This project was built is built to showcase the use of AWS Lambda functions usin
 - [Nodejs](https://nodejs.org/docs/latest/api/)
 - [Serverless Framework](https://www.npmjs.com/package/serverless)
 - [AWS Lambda](https://docs.aws.amazon.com/lambda/)
-- [Winston](https://www.npmjs.com/package/winston)
+- [AWS CloudWatch](https://docs.aws.amazon.com/cloudwatch/)
 
 ## Features
 - Create a log with unique id and a date/time stamp.
@@ -34,11 +34,13 @@ npm install
 #  Install the AWS cli
 pip install awscli
 
+# Configure your credentials
+aws configure set aws_access_key_id YOUR_ACCESS_KEY_ID
+aws configure set aws_secret_access_key YOUR_SECRET_ACCESS_KEY
+aws configure set region us-east-1
+
 # Install the serverless framework
 npm i serverless@3.39.0 -g
-
-# Configure your credentials
-serverless config credentials --provider aws --key <AWS-Access-Key-ID> --secret <AWS-Secret-key>
 
 # Deploy
 serverless deploy
@@ -60,7 +62,7 @@ Then input the following json
 ```
 {
   "Severity": "info",
-  "Message": "This is a test log message."
+  "Message": "We are testing the function."
 }
 ```
 
@@ -70,7 +72,7 @@ If you are testing in the AWS console use the following json to parse as an obje
 {
   "body": {
     "Severity": "info",
-    "Message": "This is a test log message"
+    "Message": "We are testing the function."
   }
 }
 ```
