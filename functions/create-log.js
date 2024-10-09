@@ -9,7 +9,7 @@ module.exports.createLog = async (event) => {
 
   const cloudwatchlogs = new AWS.CloudWatchLogs();
 
-  const describeParams =
+  const params =
   {
     limit: 1,
     logGroupName: "lambda_logs",
@@ -52,7 +52,7 @@ module.exports.createLog = async (event) => {
       };
     }
 
-    const res = await cloudwatchlogs.describeLogStreams(describeParams).promise();
+    const res = await cloudwatchlogs.describeLogStreams(params).promise();
     const logStreams = res.logStreams;
     const sequenceToken = logStreams[0].uploadSequenceToken;
 
@@ -108,7 +108,6 @@ module.exports.createLog = async (event) => {
     };
   }
 };
-
 
 /*
 method used to validate if the correct Severity value has been received

@@ -10,12 +10,18 @@ module.exports.getLogs = async (event) => {
         const logGroupName = 'lambda_logs';
         const logStreamName = 'lambda_logs/stream';
 
+        /*
+        parameters used to find the logs that we created
+        */
         const params = {
             logGroupName: logGroupName,
             logStreamNames: [logStreamName],
             limit: 100,
         };
 
+        /*
+        retrieves the logs from cloufwatch
+        */
         const logsInStream = await cloudwatchlogs.filterLogEvents(params).promise();
 
         return {
