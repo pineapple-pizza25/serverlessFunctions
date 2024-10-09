@@ -5,25 +5,27 @@ const cloudwatchlogs = new AWS.CloudWatchLogs({ region: 'us-east-1' });
 
 
 module.exports.getLogs = async (event) => {
-try {
+    try {
 
-    const logGroupName = '/aws/lambda/aws-nodejs-severless-functions-dev-createLog';
+        const logGroupName = 'lambda_logs';
+        const logStreamName = 'lambda_logs/stream';
 
-    const params = {
-        logGroupName: logGroupName,
-        limit: 100,  
-    };
+        const params = {
+            logGroupName: logGroupName,
+            logStreamNames: [logStreamName],
+            limit: 100,
+        };
 
-    const data = await cloudwatchlogs.filterLogEvents(params).promise();
+        const logsInStream = await cloudwatchlogs.filterLogEvents(params).promise();
 
-    return {
-        statusCode: 200,
-        body: JSON.stringify(data.events)
-    };
-} catch (error) {
-    return {
-        statusCode: 500,
-        body: JSON.stringify({ error: 'An error occurred: ' + error.message })
-    };
-}
+        return {
+            statusCode: 200,
+            body: JSON.stringify(logsInStream)
+        };
+    } catch (error) {
+        return {
+            statusCode: 500,
+            body: JSON.stringify({ error: 'An error occurred: ' + error.message })
+        };
+    }
 };
